@@ -15,8 +15,7 @@
             "url": "mongodb://localhost/atwork"
         },
         "defaultUsers": [
-            {"email": "andy.sumskoy@gmail.com", "password": "MasterPass", "allow": ["root"]},
-            {"email": "terminal@sumskoy.com", "password": "VerySecretPasswordForTerminal", "allow": ["visit-create", "user-view", "key-create"]}
+
         ]
     },
 
