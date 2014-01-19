@@ -1,0 +1,74 @@
+{
+    "$config": {
+        "default.format.processor": "default",
+        "default.format.value": "%level %date: %hostname %module(%label) %message",
+        "console":{
+            "format":{
+                "name": "default",
+                "value": "%level %date: %hostname %module(%label)::: %message\nArgs: \n %args \n Trace: \n %trace"
+            }
+        },
+
+        "development":{
+            "console":{
+                "$extend": ":$config.console",
+                "format": {
+                    "value": "%level %date: %module(%label)::: %message \n\nArgs: \n %args \n\n Trace: \n %trace"
+                }
+            }
+        }
+    },
+
+    "default": {
+        "all": {
+            "console": true
+        }
+    },
+
+    "production": {
+        "$extend": "default"
+    },
+
+    "development": {
+        "$extend": "default",
+        "all": {
+            "console":{
+                "$extend": ":$config.development.console"
+            }
+        },
+        "console": {
+            "info": {
+                "console":{
+                    "format": "@cg%level @cm%date@cg: @c_r%module(%label)@cg:::@c_r %message"
+                }
+            },
+            "debug":{
+                "console":{
+                    "format": "@cg%level @cm%date@cg: @c_r%module(%label)@cg::: @c_r\n%argsc\n"
+                }
+            },
+            "error,fatal,warn": {
+                "console":{
+                    "format": "@cg%level @cm%date@cg: @c_r%module(%label)@cg::: @c_r%message @cg::: Code: @c_r%code \n\n @cgArgs: \n@c_r %argsc"
+                }
+            }
+        },
+        "atwork": {
+            "info": {
+                "console":{
+                    "format": "@cg%level @cm%date@cg: @c_r%module(%label)@cg::: @c_r%message"
+                }
+            },
+            "debug":{
+                "console":{
+                    "format": "@cg%level @cm%date@cg: @c_r%module(%label)@cg::: @c_r\n%argsc\n"
+                }
+            },
+            "error,fatal,warn": {
+                "console":{
+                    "format": "%level %date: %module(%label)::: %message ::: \nCode: %code \nArgs:\n   %argsc   \n %trace \n"
+                }
+            }
+        }
+    }
+}

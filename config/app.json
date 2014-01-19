@@ -1,0 +1,34 @@
+{
+    "default": {
+        "server": {
+            "ip": "127.0.0.1",
+            "port": 5000,
+            "cookie": {
+                "secret": "very_secret_code"
+            },
+            "session": {
+                "url": "mongodb://localhost/atwork/sessions",
+                "auto_reconnect": true
+            }
+        },
+        "db": {
+            "url": "mongodb://localhost/atwork"
+        },
+        "defaultUsers": [
+            {"email": "andy.sumskoy@gmail.com", "password": "MasterPass", "allow": ["root"]},
+            {"email": "terminal@sumskoy.com", "password": "VerySecretPasswordForTerminal", "allow": ["visit-create", "user-view", "key-create"]}
+        ]
+    },
+
+    "production": {
+        "$extend": "default"
+    },
+
+    "development": {
+        "$extend": "default"
+    },
+
+    "test": {
+        "$extend": "default"
+    }
+}

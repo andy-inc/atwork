@@ -1,0 +1,73 @@
+.nav li.active {
+    border-left: 1px solid #bbffa0;
+}
+.nav li.active {
+    background-color: rgb(77, 75, 75);
+}
+.panel{
+    padding: 15px;
+}
+.account-card {   
+    height: 200px;
+    opacity: 0.7;
+    transition: opacity 0.1s ease-in-out;
+    -moz-transition: opacity 0.1s ease-in-out;
+    -webkit-transition: opacity 0.1s ease-in-out;
+}
+.account-card:hover, .account-card.selected {
+    opacity: 1;
+    border: 1px solid transparent;
+}
+
+.account-card.selected{
+	border: 1px solid rgb(182, 182, 212);
+}
+
+.account-card .name {
+    display: inline-block;
+    vertical-align: middle;
+}
+.account-card .name a {
+    line-height: 20px;
+}
+.account-card .color {
+    margin-right: 5px;
+    display: inline-block;
+    vertical-align: middle;
+}
+.account-card .color div {
+    width: 16px;
+    height: 16px;
+    border-radius: 10px;
+}
+
+.account-card .butotns{
+    position: absolute;
+    right: 40px;
+    top: 10px;
+    width: 20px;
+    z-index: 1;
+}
+
+.color i{
+    display: block; 
+    cursor: pointer; 
+    width: 16px; 
+    height: 16px;
+}
+
+.range {
+    position: absolute;
+    height: 15px;
+    background-color: #6C98F8;
+}
+.range.low {
+    background-color: #f88191;
+}
+.range.legend {
+    background-color: transparent;
+    font-size: 10px;
+}
+.range.legend.bold {
+    font-weight: bold;
+}

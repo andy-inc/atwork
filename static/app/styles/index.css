@@ -1,0 +1,16 @@
+/*-- HTML5 Boilerplate. -----------------------------------------------------*/
+ @import"../../vendor/bower/html5-boilerplate/css/normalize.css";
+ @import"../../vendor/bower/html5-boilerplate/css/main.css";
+ @import"../../vendor/bower/bootstrap/dist/css/bootstrap.css";
+ @import"../../vendor/bower/bootstrap/dist/css/bootstrap-theme.css";
+ @import"../../vendor/bower/font-awesome/css/font-awesome.css";
+ @import"../../vendor/bower/bootstrap-colorpicker/css/colorpicker.css";
+ @import"../../vendor/bower/jqueryui/themes/base/jquery-ui.css";
+ @import"./theme.css";
+ @import"./main.css";
+
+/*-- Application stylesheets. -----------------------------------------------*/
+
+.ui-sortable-placeholder {
+    margin-left: 0 !important;
+}
