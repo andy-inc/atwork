@@ -6,29 +6,44 @@
 var require = require('a.require');
 require.init({root: __dirname});
 var $errors = require("./errors"),
-    $path = require("path"),
     $MongoClient = require('mongodb').MongoClient,
-    $async = require("async"),
     $jsv = require("JSV").JSV.createEnvironment();
 
+var $config = require('./config/app');
+
+var logentries = require('node-logentries');
+var log = logentries.logger({
+    token: $config.logger
+});
 //Logger
 
-var env = process.NODE_ENV || "development";
-
-var $LoggerFactory = require('the.logger');
-$LoggerFactory.configure(__dirname + '/config/logger.json', {
-    wrapConsole: env === "production",
-    wrapUncaught: false,
-    rootDir: __dirname
-}).env(env).init();
-var logger = $LoggerFactory.getLogger('atwork'),
-    omnisLogger = $LoggerFactory.getLogger('atwork.omnis');
-
 //App config
-var $config = require('a.config');
-$config.load(__dirname + '/config/app.json').env(env);
-
 $config.jsv = $jsv;
+$config.getLogger = function(name){
+    return {
+        log: function(){
+            log.log([name + ": "].concat(Array.prototype.slice.call(arguments)));
+        },
+        info: function(){
+            log.info([name + ": "].concat(Array.prototype.slice.call(arguments)));
+        },
+        error: function(){
+            log.error([name + ": "].concat(Array.prototype.slice.call(arguments)));
+        },
+        fatal: function(){
+            log.fatal([name + ": "].concat(Array.prototype.slice.call(arguments)));
+        },
+        debug: function(){
+            log.debug([name + ": "].concat(Array.prototype.slice.call(arguments)));
+        },
+        warning: function(){
+            log.warning([name + ": "].concat(Array.prototype.slice.call(arguments)));
+        }
+    }
+};
+
+var logger = $config.getLogger('atwork'),
+    omnisLogger = $config.getLogger('atwork.omnis');
 
 var $omnisErrors = require('omnis.core').errors;
 
@@ -59,7 +74,6 @@ $auth.addRule('default_with_self', function(controller, url, method, session, re
 $auth.addRule('allow', function(session, callback){
     callback();
 });
-
 $auth.addRule('login', function(session, callback){
     if (session.user == null){
         callback(new $omnisErrors.OmnisAuthorizationUnauthorized());
@@ -145,16 +159,18 @@ exports.init = function(callback){
 
 };
 
+var port = process.env.PORT || $config.server.port;
+
 exports.start = function(callback){
     callback = callback || function(){};
 
-    $Omnis.start("http://"+$config.server.ip+":"+$config.server.port, function(err){
+    $Omnis.start("http://"+$config.server.ip+":"+port, function(err){
         if (err) {
             logger.error(err);
             callback(err);
             return;
         }
-        logger.info('Listening on ' + $config.server.ip + ':' + $config.server.port);
+        logger.info('Listening on ' + $config.server.ip + ':' + port);
         callback(null);
     });
 };

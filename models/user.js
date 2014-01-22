@@ -6,11 +6,11 @@ var $bcrypt = require('bcrypt'),
     $ObjectID = require('mongodb').ObjectID,
     $async = require('async');
 
-var logger = require('the.logger').getLogger('atwork.models.user'),
+var logger = require('./config/app').getLogger('atwork.models.user'),
     errors = require("./errors"),
-    collection = require('a.config').db.client.collection("user"),
-    jsv = require("a.config").jsv,
-    defaultUsers = require("a.config").defaultUsers,
+    collection = require('./config/app').db.client.collection("user"),
+    jsv = require("./config/app").jsv,
+    defaultUsers = require("./config/app").defaultUsers,
     keysModel = require('./models/key');
 
 jsv.createSchema({

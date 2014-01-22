@@ -6,9 +6,8 @@ var require = require('a.require');
 var $ObjectID = require('mongodb').ObjectID;
 
 var errors = require("./errors"),
-    collection = require('a.config').db.client.collection("keys"),
-    jsv = require("a.config").jsv,
-    logger = require('the.logger').getLogger('atwork.models.keys');
+    collection = require('./config/app').db.client.collection("keys"),
+    jsv = require("./config/app").jsv;
 
 jsv.createSchema({
     "$schema":"http://json-schema.org/draft-03/schema#",

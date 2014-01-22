@@ -6,7 +6,7 @@ var assert = require('assert');
 var request = require('supertest');
 var async = require('async');
 var app = require('../app'),
-    config = require('a.config'),
+    config = require('../config/app'),
     user = config.defaultUsers[0];
 
 describe('#user', function(){
