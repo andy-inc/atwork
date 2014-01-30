@@ -51,9 +51,33 @@ exports.create = (email, password, options, cb)->
         cb err, result[0]
   ], cb
 
+#Find user
+exports.get = (email, cb)-> collection.findOne {email: email}, cb
+
+#Find user by email password
+exports.find = (email, password, cb)->
+  user = null
+  $async.waterfall [
+    (cb) -> exports.get email, cb
+    (result, cb) ->
+      if not result?
+        cb {message: "User not found #{email}", code: 100}
+      else
+        user = result
+        comparePassword password, user.password, cb
+    (allow, cb)->
+      if not allow
+        cb {message: "User or password not correct", code: 101}
+      else
+        cb null, user
+  ], cb
+
 #Gen crypt password with salt
 cryptPassword = (password, cb) ->
   $async.waterfall [
     (cb) -> $bcrypt.genSalt 10, cb
     (salt, cb) -> $bcrypt.hash password, salt, cb
   ], cb
+
+#Compare user passwords
+comparePassword = (password, userPassword, cb) -> $bcrypt.compare password, userPassword, cb

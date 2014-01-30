@@ -8,6 +8,7 @@ $async = require('async')
 
 _config = _require './config'
 _env = _require './env'
+_userModel = _require './models/user'
 
 #Start Application
 exports.start = (cb)->
@@ -28,7 +29,6 @@ exports.db = (cb)->
       $async.each files,
         (file, next)-> require(file).init(db, next)
       , cb
-
   ], cb
 
 #Start http server
@@ -49,6 +49,9 @@ exports.server = (cb)->
   app.use $express.json()
 
   app.use $express.logger() if 'development' == app.get 'env'
+
+  app.use middlewares.rewriteUrls
+
   app.use app.router
   app.use $express.static(_require.path('../client'))
 
@@ -62,9 +65,9 @@ exports.server = (cb)->
 
   app.use (err, req, res, next)->
     if req.isAPI
-      res.send(500, err.message || "Unknown error")
+      res.send(500, {message: err.message || "Unknown error", code: err.code || 0})
     else
-      res.status(500);
+      res.status(500)
       res.sendfile _require.path('../client/E500.html')
 
 
@@ -80,7 +83,39 @@ exports.server = (cb)->
     cb(err)
 
 middlewares =
+  #Check autorization
   checkAuth: (req, res, next)->
-    next()
+    #Allow display login page for all methods
+    if req.url in ['/auth/login', '/login.html']
+      next()
+      return
+
+    if req.session.email?
+      next()
+    else if not req.isAPI
+      res.redirect(307, '/auth/login')
+    else
+      res.send(401, {message: "Unauthorized", code: 401})
+
+  #Load current user
   loadUser: (req, res, next)->
+    _userModel.get req.session.email, (err, user)->
+      if err
+        console.error err
+        next err
+      else if not user?
+        delete req.session
+        middlewares.checkAuth(req, res, next)
+      else
+        req.user = user
+        next()
+
+  #Rewrite urls
+  rewriteUrls: (req, res, next)->
+    req.isAPI = req.url.indexOf('/api') > -1
+    if not req.isAPI
+      if req.url == '/auth/login'
+        req.url = '/login.html'
+      else
+        req.url = '/index.html'
     next()

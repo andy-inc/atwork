@@ -6,5 +6,6 @@ _require.init
 #Load bootstrap
 _bootstrap = _require './bootstrap'
 
+#Start application
 _bootstrap.start (err)->
   throw err if err
