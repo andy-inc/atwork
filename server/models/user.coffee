@@ -30,7 +30,7 @@ exports.init = (db, cb)->
 
 #User exists check
 exports.exists = (email, cb) ->
-  collection.count {email: email}, (err, count)-> cb(err, count > 0)
+  collection.count {email: email}, (err, count = 0)-> cb(err, count > 0)
 
 
 #Create user
