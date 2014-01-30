@@ -23,7 +23,7 @@
     "JSV": "~4.0.2",
     "bcrypt": "~0.7.7",
     "async": "~0.2.9",
-    "omnis.core": "git+https://github.com/andy-inc/omnis.core.git",
-    "node-logentries": "~0.1.2"
+    "express": "~3.4.8",
+    "glob": "~3.2.8"
   }
 }
