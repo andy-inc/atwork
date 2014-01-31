@@ -3,6 +3,7 @@ $MongoClient = require('mongodb').MongoClient
 $http = require('http')
 $express = require('express')
 $MongoStore = require('connect-mongo')($express)
+$lessMiddleware = require('less-middleware')
 $glob = require('glob')
 $async = require('async')
 
@@ -53,7 +54,10 @@ exports.server = (cb)->
   app.use middlewares.rewriteUrls
 
   app.use app.router
-  app.use $express.static(_require.path('../client'))
+
+  app.use '/static', $lessMiddleware({src: _require.path('../client'), compress: false})
+
+  app.use '/static', $express.static(_require.path('../client'))
 
   app.use (req, res, next)->
     res.status 404
@@ -86,7 +90,7 @@ middlewares =
   #Check autorization
   checkAuth: (req, res, next)->
     #Allow display login page for all methods
-    if req.url in ['/auth/login', '/login.html']
+    if req.url in ['/auth/login', '/login.html', '/static/login.html'] or req.isStatic
       next()
       return
 
@@ -113,9 +117,10 @@ middlewares =
   #Rewrite urls
   rewriteUrls: (req, res, next)->
     req.isAPI = req.url.indexOf('/api') > -1
+    req.isStatic = req.url.indexOf('/static') > -1
     if not req.isAPI
       if req.url == '/auth/login'
-        req.url = '/login.html'
-      else
+        req.url = '/static/login.html'
+      else if not req.isStatic
         req.url = '/index.html'
     next()
